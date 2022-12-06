@@ -1,7 +1,12 @@
+import java.io.File;
+import java.util.List;
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("init project");
+        Reader reader = new Reader(new File("input/entradaLog.txt"));
+        List<String> lines = reader.read();
+        lines.forEach(System.out::println);
     }
 
 }
