@@ -1,20 +1,41 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Database {
 
-    public Connection connect() {
-        Connection conn = null;
+    public static Connection connection;
+    public static Statement stmt;
+    public static ResultSet rs;
+
+    public static Connection connect() {
+        connection = null;
         DatabaseCredentials dbc = new DatabaseCredentials();
 
         try {
-            conn = DriverManager.getConnection(dbc.getUrl(), dbc.getUser(), dbc.getPassword());
-            System.out.println("Connected to the PostgreSQL server successfully.");
+            connection = DriverManager.getConnection(dbc.getUrl(), dbc.getUser(), dbc.getPassword());
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return conn;
+        return connection;
     }
+
+    public static void close() {
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            System.out.println("Erro ao encerrar a conexão com o banco de dados!\n" + ex.getMessage());
+        }
+    }
+
+    public static void execute(String sql) {
+        try {
+            Database.connect();
+            stmt = connection.createStatement(rs.TYPE_SCROLL_INSENSITIVE, rs.CONCUR_READ_ONLY);
+            stmt.execute(sql);
+            Database.close();
+        } catch (SQLException ex) {
+            System.out.println("Erro ao executar o SQL:\n" + ex.getMessage());
+        }
+    }
+
 }
