@@ -7,6 +7,11 @@ public class Main {
         Reader reader = new Reader(new File("input/entradaLog.txt"));
         List<String> lines = reader.read();
         lines.forEach(System.out::println);
+
+        Database db = new Database();
+
+        db.connect();
     }
 
 }
+
