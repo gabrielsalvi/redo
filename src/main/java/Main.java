@@ -1,16 +1,16 @@
-import java.io.File;
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        Reader reader = new Reader(new File("input/entradaLog.txt"));
-        List<String> lines = reader.read();
-        lines.forEach(System.out::println);
+        Parser parser = new Parser("input/metadado.json");
 
-        Database db = new Database();
+        List<Integer> firstColumnValues = parser.getFirstColumnValues();
+        List<Integer> secondColumnValues = parser.getSecondColumnValues();
 
-        db.connect();
+        firstColumnValues.forEach(System.out::println);
+        secondColumnValues.forEach(System.out::println);
+
     }
 
 }
