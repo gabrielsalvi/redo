@@ -3,16 +3,19 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Reader {
 
     private File file;
+    private List<String> lines;
 
     public Reader(final File file) {
         this.file = file;
+        this.lines = cleanLines(read());
     }
 
-    public List<String> read() {
+    private List<String> read() {
         List<String> lines = new ArrayList<>();
 
         try {
@@ -27,4 +30,13 @@ public class Reader {
         return lines;
     }
 
+    private List<String> cleanLines(List<String> lines) {
+        return lines.stream()
+                .map(line -> line.replace("<", "").replace(">", ""))
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getLines() {
+        return lines;
+    }
 }
