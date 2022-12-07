@@ -8,9 +8,10 @@ public class Main {
         List<Integer> firstColumnValues = parser.getFirstColumnValues();
         List<Integer> secondColumnValues = parser.getSecondColumnValues();
 
-        firstColumnValues.forEach(System.out::println);
-        secondColumnValues.forEach(System.out::println);
+        DatabaseOperations databaseOperations = new DatabaseOperations();
 
+        databaseOperations.createTable();
+        databaseOperations.insertData(firstColumnValues, secondColumnValues);
     }
 
 }
