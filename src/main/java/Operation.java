@@ -12,6 +12,22 @@ public class Operation {
         this.newValue = newValue;
     }
 
+    public int getTupleId() {
+        return tupleId;
+    }
+
+    public String getColumn() {
+        return column;
+    }
+
+    public int getOldValue() {
+        return oldValue;
+    }
+
+    public int getNewValue() {
+        return newValue;
+    }
+
     @Override
     public String toString() {
         return "Operation{" +
