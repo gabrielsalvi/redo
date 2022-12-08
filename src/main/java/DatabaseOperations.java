@@ -54,6 +54,22 @@ public class DatabaseOperations implements AutoCloseable {
         }
     }
 
+    public int select(int id, String column) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM dados WHERE id = ?");
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            return rs.getInt(column);
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao executar o SQL:\n" + e.getMessage());
+            return -1;
+        }
+
+    }
+
     @Override
     public void close() {
         database.close();
