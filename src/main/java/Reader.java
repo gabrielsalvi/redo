@@ -8,9 +8,9 @@ public class Reader {
     private File file;
     private List<String> lines;
     private List<Transaction> transactions;
+    private List<Transaction> transactionsToRedo;
 
     private void parse() {
-        List<Transaction> sortedTransactions = new ArrayList<>();
         List<String> commitsOrder = new ArrayList<>();
 
         for (String line : lines) {
@@ -30,19 +30,14 @@ public class Reader {
             }
         }
 
-        commitsOrder.forEach(c -> sortedTransactions.add(findTransactionByName(c)));
-        transactions.forEach(t -> {
-            if (!sortedTransactions.contains(t)) sortedTransactions.add(t);
-        });
-
-        transactions.clear();
-        transactions.addAll(sortedTransactions);
+        commitsOrder.forEach(c -> transactionsToRedo.add(findTransactionByName(c)));
     }
 
     public Reader(final File file) {
         this.file = file;
         this.lines = cleanLines(read());
         this.transactions = new ArrayList<>();
+        this.transactionsToRedo = new ArrayList<>();
         parse();
     }
 
@@ -80,5 +75,9 @@ public class Reader {
 
     public List<Transaction> getTransactions() {
         return transactions;
+    }
+
+    public List<Transaction> getTransactionsToRedo() {
+        return transactionsToRedo;
     }
 }
