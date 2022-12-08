@@ -1,6 +1,5 @@
 import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -21,23 +20,6 @@ public class Main {
                 .stream()
                 .filter(Transaction::isCommitted)
                 .forEach(t -> System.out.printf("A transação %s irá sofrer redo!\n", t.getName()));
-
-    }
-
-
-    public static List<String> getStartedTransactions(List<String> lines) {
-        return lines.stream()
-                .filter(line -> line.startsWith("start"))
-                .map(line -> line.replace("start ", ""))
-                .collect(Collectors.toList());
-
-    }
-
-    public static List<String> getCommittedTransactions(List<String> lines) {
-        return lines.stream()
-                .filter(line -> line.startsWith("commit"))
-                .map(line -> line.replace("commit ", ""))
-                .collect(Collectors.toList());
 
     }
 
