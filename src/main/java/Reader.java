@@ -5,14 +5,12 @@ import java.util.stream.Collectors;
 
 public class Reader {
 
-    private File file;
-    private List<String> lines;
-    private List<Transaction> transactions;
-    private List<Transaction> transactionsToRedo;
+    private final File file;
+    private final List<String> lines;
+    private final List<Transaction> transactions;
+    private final List<Transaction> transactionsToRedo;
 
     private void parse() {
-        List<String> commitsOrder = new ArrayList<>();
-
         for (String line : lines) {
             if (line.startsWith("start")) {
                 String name = line.replace("start ", "");
@@ -21,16 +19,16 @@ public class Reader {
                 String name = line.replace("commit ", "");
                 Transaction transaction = findTransactionByName(name);
                 if (transaction != null) transaction.commit();
-                commitsOrder.add(name);
+                transactionsToRedo.add(transaction);
             } else if (line.startsWith("T")) {
                 List<String> splittedLine = Arrays.stream(line.split(",")).collect(Collectors.toList());
                 Transaction transaction = findTransactionByName(splittedLine.get(0));
                 splittedLine.remove(0);
                 if (transaction != null) transaction.addOperation(splittedLine);
+            } else if (line.startsWith("CKPT")) {
+                transactionsToRedo.clear();
             }
         }
-
-        commitsOrder.forEach(c -> transactionsToRedo.add(findTransactionByName(c)));
     }
 
     public Reader(final File file) {
@@ -71,10 +69,6 @@ public class Reader {
         }
 
         return null;
-    }
-
-    public List<Transaction> getTransactions() {
-        return transactions;
     }
 
     public List<Transaction> getTransactionsToRedo() {
