@@ -19,6 +19,7 @@ public class Main {
               .forEach(t -> System.out.printf("A transação %s irá sofrer redo!\n", t.getName()));
 
         redo(reader.getTransactionsToRedo());
+        databaseOperations.selectAll();
     }
 
     private static void redo(List<Transaction> transactions) {
@@ -29,7 +30,7 @@ public class Main {
             if (currentValue != op.getNewValue()) {
                 db.update(op.getTupleId(), op.getColumn(), op.getNewValue());
                 System.out.printf("%s alterou o valor da coluna %s de %s para %s na tupla %s\n",
-                        t.getName(), op.getColumn(), currentValue, op.getNewValue(), op.getTupleId()
+                    t.getName(), op.getColumn(), op.getOldValue(), op.getNewValue(), op.getTupleId()
                 );
             }
         }));
