@@ -1,9 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Reader {
@@ -13,6 +10,9 @@ public class Reader {
     private List<Transaction> transactions;
 
     private void parse() {
+        List<Transaction> sortedTransactions = new ArrayList<>();
+        List<String> commitsOrder = new ArrayList<>();
+
         for (String line : lines) {
             if (line.startsWith("start")) {
                 String name = line.replace("start ", "");
@@ -21,6 +21,7 @@ public class Reader {
                 String name = line.replace("commit ", "");
                 Transaction transaction = findTransactionByName(name);
                 if (transaction != null) transaction.commit();
+                commitsOrder.add(name);
             } else if (line.startsWith("T")) {
                 List<String> splittedLine = Arrays.stream(line.split(",")).collect(Collectors.toList());
                 Transaction transaction = findTransactionByName(splittedLine.get(0));
@@ -28,6 +29,14 @@ public class Reader {
                 if (transaction != null) transaction.addOperation(splittedLine);
             }
         }
+
+        commitsOrder.forEach(c -> sortedTransactions.add(findTransactionByName(c)));
+        transactions.forEach(t -> {
+            if (!sortedTransactions.contains(t)) sortedTransactions.add(t);
+        });
+
+        transactions.clear();
+        transactions.addAll(sortedTransactions);
     }
 
     public Reader(final File file) {
