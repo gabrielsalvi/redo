@@ -30,9 +30,9 @@ public class Main {
             t.getOperations().forEach(op -> {
                 int currentValue = db.select(op.getTupleId(), op.getColumn());
                 if (currentValue != op.getNewValue()) {
-                    // update database
-                    System.out.printf("%s atualizou a tupla %s, alterando o valor da coluna %s de %s para %s\n",
-                            t.getName(), op.getTupleId(), op.getColumn(), currentValue, op.getNewValue()
+                    db.update(op.getTupleId(), op.getColumn(), op.getNewValue());
+                    System.out.printf("%s alterou o valor da coluna %s de %s para %s na tupla %s\n",
+                            t.getName(), op.getColumn(), currentValue, op.getNewValue(), op.getTupleId()
                     );
                 }
             });

@@ -67,7 +67,33 @@ public class DatabaseOperations implements AutoCloseable {
             System.out.println("Erro ao executar o SQL:\n" + e.getMessage());
             return -1;
         }
+    }
 
+    public void update(int id, String column, int newValue) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("UPDATE dados SET " + column + " = ? WHERE id = ?;"            );
+
+            stmt.setInt(1, newValue);
+            stmt.setInt(2, id);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Erro ao executar o update: " + e.getMessage());
+        }
+    }
+
+    public void selectAll() {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM dados ORDER BY id ASC;");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                System.out.printf("%s %s %s\n", rs.getInt("id"), rs.getInt("a"), rs.getInt("b"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao executar o SQL:\n" + e.getMessage());
+        }
     }
 
     @Override
